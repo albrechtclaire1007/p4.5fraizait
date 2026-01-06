@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="lb">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>P4 – A menger Fräizäit</title>
 
 <style>
-/* ================= FONT ================= */
 @font-face {
   font-family: "Schoulschrëft";
-  src:url('https://raw.githubusercontent.com/albrechtclaire1007/schoulschreft/main/schoulschreft_bold%5B2%5D.TTF') format('truetype');
-    font-weight:bold; font-display:swap;
+  src: url("SCHOULSCHRËFT_FONT_URL_HERE") format("truetype");
+}
+
+:root {
+  --p4-purple: #7a5ea8;
+  --p4-purple-light: #e9e4f3;
+  --p4-purple-dark: #5f468c;
 }
 
 * {
@@ -18,209 +22,179 @@
   font-family: "Schoulschrëft", sans-serif;
 }
 
-/* ================= COLORS ================= */
-:root {
-  --purple: #7b5fa1;
-  --light-purple: #efe9f7;
-  --green: #9ad29a;
-}
-
-/* ================= LAYOUT ================= */
 body {
   margin: 0;
   background: #f6f4fb;
 }
 
 .container {
-  max-width: 900px;
+  max-width: 1100px;
   margin: auto;
   padding: 16px;
 }
 
-.top-bar {
-  background: var(--purple);
+/* ───────── TOP NAV ───────── */
+.top-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  background: var(--p4-purple);
   color: white;
-  padding: 12px;
-  border-radius: 20px;
-  text-align: center;
-  font-size: 26px;
+  border-radius: 30px;
+  padding: 10px 30px;
+  margin-bottom: 16px;
 }
 
+.top-nav button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 32px;
+  cursor: pointer;
+}
+
+/* ───────── INSTRUCTION ───────── */
 .instruction {
   background: white;
-  border-radius: 16px;
-  padding: 10px 14px;
-  margin: 14px 0;
+  border-radius: 18px;
+  padding: 12px 18px;
   text-align: center;
-  font-size: 20px;
+  font-size: 22px;
+  margin-bottom: 16px;
 }
 
-/* ================= GRID ================= */
+/* ───────── GRID ───────── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 14px;
 }
 
 .card {
   background: white;
-  border-radius: 16px;
-  padding: 10px;
+  border-radius: 20px;
+  padding: 12px;
   text-align: center;
   cursor: pointer;
 }
 
 .card img {
   width: 100%;
-  max-height: 100px;
+  height: 110px;
   object-fit: contain;
-}
-
-/* ================= WORD BOX ================= */
-.word-box {
-  background: white;
-  border-radius: 18px;
-  padding: 14px;
-  font-size: 28px;
-  text-align: center;
-  margin-bottom: 14px;
-}
-
-/* ================= LETTER SORT ================= */
-.letters {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.letter {
-  background: white;
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 22px;
-  cursor: grab;
-}
-
-.slots {
-  display: flex;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 14px;
-}
-
-.slot {
-  width: 40px;
-  height: 40px;
-  background: #fff;
-  border-radius: 10px;
-  text-align: center;
-  line-height: 40px;
-  font-size: 22px;
-}
-
-/* ================= SORT ================= */
-.sort-zones {
-  display: flex;
-  gap: 12px;
-}
-
-.zone {
-  flex: 1;
-  background: white;
-  border-radius: 16px;
-  padding: 10px;
-  min-height: 180px;
-}
-
-.zone h3 {
-  text-align: center;
-}
-
-/* ================= NAV ================= */
-.nav {
-  margin-top: 20px;
-  background: var(--purple);
-  border-radius: 30px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  color: white;
-  font-size: 22px;
-}
-
-.nav button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 28px;
-  cursor: pointer;
 }
 </style>
 </head>
 
 <body>
 <div class="container">
-  <div class="top-bar" id="title"></div>
-  <div class="instruction" id="instruction"></div>
-  <div id="game"></div>
 
-  <div class="nav">
+  <!-- TOP NAV -->
+  <div class="top-nav">
     <button onclick="prevGame()">◀</button>
-    <span id="counter"></span>
     <button onclick="nextGame()">▶</button>
   </div>
+
+  <!-- INSTRUCTION -->
+  <div class="instruction" id="instruction"></div>
+
+  <!-- GAME -->
+  <div id="game"></div>
+
 </div>
 
 <script>
-/* ================= DATA ================= */
+/* ───────── DATA ───────── */
 const items = [
-  {w:"boxen", img:"https://i.postimg.cc/DJ3s1CY0/boxen.png"},
-  {w:"danzen", img:"https://i.postimg.cc/cgGYfD5K/danzen.png"},
-  {w:"fuere skate", img:"https://i.postimg.cc/PpbDymBf/fuere-skateboard.png"},
-  {w:"fuere velo", img:"https://i.postimg.cc/cg73hQVL/fuere-velo.png"},
-  {w:"kachen", img:"https://i.postimg.cc/YGNFR1Jq/kachen.png"},
-  {w:"kucken telee", img:"https://i.postimg.cc/8Jdv4hqc/kucken-telee.png"},
-  {w:"lafen", img:"https://i.postimg.cc/0MGSnpLw/lafen.png"},
-  {w:"lauschtere musek", img:"https://i.postimg.cc/5Y5zgwZw/lauschtere-musek.png"},
-  {w:"leieren", img:"https://i.postimg.cc/1n0FBpLK/leieren.png"},
-  {w:"liesen", img:"https://i.postimg.cc/9RP9bGvx/liesen.png"},
-  {w:"maache musek", img:"https://i.postimg.cc/ZBPNHr1w/maache-musek.png"},
-  {w:"maache sport", img:"https://i.postimg.cc/K3ZMH12n/maache-sport.png"},
-  {w:"maache yoga", img:"https://i.postimg.cc/JH1k2sL2/maache-yoga.png"},
-  {w:"molen", img:"https://i.postimg.cc/D42XMSTR/molen.png"},
-  {w:"raschten", img:"https://i.postimg.cc/tnXxMsbH/raschten.png"},
-  {w:"schwammen", img:"https://i.postimg.cc/Wq2kHdVT/schwammen.png"},
-  {w:"spadséieren", img:"https://i.postimg.cc/23mh6KZW/spadseieren.png"},
-  {w:"spille basket", img:"https://i.postimg.cc/ThGgw4DS/spille-basket.png"},
-  {w:"spille fussball", img:"https://i.postimg.cc/pyxzT6FS/spille-fussball.png"},
-  {w:"spille gittar", img:"https://i.postimg.cc/Z0ZpRMdX/spille-gittar.png"},
-  {w:"spille videospill", img:"https://i.postimg.cc/hhrx71Lp/spille-videospiller.png"},
-  {w:"spillen", img:"https://i.postimg.cc/z3jWRFCc/spillen.png"},
-  {w:"telefoneieren", img:"https://i.postimg.cc/NL4Trk6Z/telefoneieren.png"},
-  {w:"turnen", img:"https://i.postimg.cc/Yj3gmzN7/turnen.png"}
+  { word: "boxen", img: "https://i.postimg.cc/DJ3s1CY0/boxen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/boxen.mp3" },
+  { word: "danzen", img: "https://i.postimg.cc/cgGYfD5K/danzen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/danzen.mp3" },
+  { word: "kachen", img: "https://i.postimg.cc/YGNFR1Jq/kachen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/kachen.mp3" },
+  { word: "lafen", img: "https://i.postimg.cc/0MGSnpLw/lafen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/lafen.mp3" },
+  { word: "liesen", img: "https://i.postimg.cc/9RP9bGvx/liesen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/liesen.mp3" }
+  // (we’ll add the rest next — structure is ready)
 ];
 
-/* ================= GAME ENGINE ================= */
+/* ───────── GAME STATE ───────── */
 let gameIndex = 0;
 
-const games = [
-  {title:"Lauschter a klick", instr:"Lauschter a klick op dat richtegt Bild."},
-  {title:"Lies a klick", instr:"Lies d’Wuert a klick op dat richtegt Bild."},
-  {title:"Schreif d’Wuert", instr:"Setz d’Buschtawen an déi richteg Reiefolleg."},
-  {title:"Sortéier", instr:"Zéi d’Bild an déi richteg Këscht."}
-];
-
+/* ───────── GAME LOADER ───────── */
 function loadGame() {
-  document.getElementById("title").textContent = games[gameIndex].title;
-  document.getElementById("instruction").textContent = games[gameIndex].instr;
-  document.getElementById("counter").textContent = (gameIndex+1) + " / 4";
-  document.getElementById("game").innerHTML = "<p style='text-align:center'>Game logic loaded ✔</p>";
+  const game = document.getElementById("game");
+
+  if (gameIndex === 0) loadGame1();
+  if (gameIndex === 1) loadGame2();
+  if (gameIndex === 2) loadGame3();
+  if (gameIndex === 3) loadGame4();
 }
 
-function nextGame(){ if(gameIndex<3){gameIndex++; loadGame();}}
-function prevGame(){ if(gameIndex>0){gameIndex--; loadGame();}}
+/* ───────── GAME 1: LAUSCHTER A KLICK ───────── */
+function loadGame1() {
+  document.getElementById("instruction").textContent =
+    "Lauschter a klick op dat richtegt Bild.";
+
+  const game = document.getElementById("game");
+  game.innerHTML = "";
+
+  const grid = document.createElement("div");
+  grid.className = "grid";
+
+  const current = items[Math.floor(Math.random() * items.length)];
+  const audio = new Audio(current.audio);
+  audio.play();
+
+  items.forEach(item => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    const img = document.createElement("img");
+    img.src = item.img;
+
+    card.appendChild(img);
+
+    card.onclick = () => {
+      if (item.word === current.word) {
+        audio.pause();
+        audio.currentTime = 0;
+        loadGame1();
+      }
+    };
+
+    grid.appendChild(card);
+  });
+
+  game.appendChild(grid);
+}
+
+/* ───────── PLACEHOLDERS (next step) ───────── */
+function loadGame2() {
+  document.getElementById("instruction").textContent =
+    "Lies d’Wuert a klick op dat richtegt Bild.";
+  document.getElementById("game").innerHTML = "";
+}
+
+function loadGame3() {
+  document.getElementById("instruction").textContent =
+    "Setz d’Buschtawen an déi richteg Reiefolleg.";
+  document.getElementById("game").innerHTML = "";
+}
+
+function loadGame4() {
+  document.getElementById("instruction").textContent =
+    "Zéi d’Bild an déi richteg Këscht.";
+  document.getElementById("game").innerHTML = "";
+}
+
+/* ───────── NAV ───────── */
+function nextGame() {
+  gameIndex = (gameIndex + 1) % 4;
+  loadGame();
+}
+
+function prevGame() {
+  gameIndex = (gameIndex + 3) % 4;
+  loadGame();
+}
 
 loadGame();
 </script>
