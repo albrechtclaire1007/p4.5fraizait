@@ -1,202 +1,919 @@
 <!DOCTYPE html>
 <html lang="lb">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P4 – A menger Fräizäit</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>P4 – A menger Fräizäit</title>
 
-<style>
-@font-face {
-  font-family: "Schoulschrëft";
-  src: url("SCHOULSCHRËFT_FONT_URL_HERE") format("truetype");
-}
+  <style>
+    /* FONT */
+    @font-face{
+      font-family:'Schoulschrëft';
+      src:url('https://raw.githubusercontent.com/albrechtclaire1007/schoulschreft/main/schoulschreft_bold%5B2%5D.TTF')
+           format('truetype');
+      font-weight:bold;
+      font-style:normal;
+      font-display:swap;
+    }
 
-:root {
-  --p4-purple: #7a5ea8;
-  --p4-purple-light: #e9e4f3;
-  --p4-purple-dark: #5f468c;
-}
+    :root{
+      --purple-mid:#b7a2e5;
+      --purple-light:#ebe3ff;
+      --purple-dark:#6c4aa3;
+      --ink:#2d1844;
+      --white:#fff;
+      --ok:#b7f0c8;
+      --bad:#ffcccc;
+    }
 
-* {
-  box-sizing: border-box;
-  font-family: "Schoulschrëft", sans-serif;
-}
+    *{ margin:0; padding:0; box-sizing:border-box; }
 
-body {
-  margin: 0;
-  background: #f6f4fb;
-}
+    body{
+      font-family:'Schoulschrëft', system-ui, sans-serif;
+      background:var(--purple-light);
+      padding:16px;
+      color:var(--ink);
+      min-height:100vh;
+    }
 
-.container {
-  max-width: 1100px;
-  margin: auto;
-  padding: 16px;
-}
+    button{
+      font-family:'Schoulschrëft', system-ui, sans-serif;
+      cursor:pointer;
+    }
 
-/* ───────── TOP NAV ───────── */
-.top-nav {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 40px;
-  background: var(--p4-purple);
-  color: white;
-  border-radius: 30px;
-  padding: 10px 30px;
-  margin-bottom: 16px;
-}
+    /* TOP BAR (same as Kalenner) */
+    .top-bar{
+      max-width:1100px;
+      margin:0 auto 8px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:var(--purple-mid);
+      border-radius:999px;
+      padding:4px 10px;
+      color:var(--white);
+      gap:10px;
+    }
+    .top-bar-title{
+      font-size:1.05rem;
+      flex:1;
+      text-align:center;
+      min-height:1.4em;
+      opacity:.95;
+    }
+    .top-arrow{
+      width:28px;
+      height:28px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:50%;
+      border:2px solid var(--white);
+      font-size:1.1rem;
+      background:transparent;
+      color:var(--white);
+    }
+    .top-arrow:disabled{
+      opacity:0.4;
+      cursor:default;
+    }
 
-.top-nav button {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 32px;
-  cursor: pointer;
-}
+    .subtitle{
+      max-width:1100px;
+      margin:0 auto 12px;
+      text-align:center;
+      font-size:0.9rem;
+      opacity:0.8;
+    }
 
-/* ───────── INSTRUCTION ───────── */
-.instruction {
-  background: white;
-  border-radius: 18px;
-  padding: 12px 18px;
-  text-align: center;
-  font-size: 22px;
-  margin-bottom: 16px;
-}
+    .games{
+      max-width:1100px;
+      margin:0 auto;
+    }
 
-/* ───────── GRID ───────── */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 14px;
-}
+    .game{ display:none; }
+    .game.active{ display:block; }
 
-.card {
-  background: white;
-  border-radius: 20px;
-  padding: 12px;
-  text-align: center;
-  cursor: pointer;
-}
+    h2{
+      font-size:1.1rem;
+      margin-bottom:6px;
+      text-align:center;
+      color:var(--purple-dark);
+    }
 
-.card img {
-  width: 100%;
-  height: 110px;
-  object-fit: contain;
-}
-</style>
+    /* NEW: white rounded instruction box (your request) */
+    .instruction-box{
+      background:var(--white);
+      border-radius:18px;
+      padding:10px 14px;
+      text-align:center;
+      font-size:0.95rem;
+      margin:0 auto 12px;
+      border:2px solid rgba(108,74,163,.15);
+    }
+
+    .primary{
+      padding:6px 14px;
+      border-radius:999px;
+      border:2px solid var(--purple-dark);
+      background:var(--purple-mid);
+      color:var(--white);
+      font-size:0.9rem;
+    }
+    .secondary{
+      padding:4px 10px;
+      border-radius:999px;
+      border:2px solid var(--purple-mid);
+      background:white;
+      color:var(--ink);
+      font-size:0.85rem;
+    }
+
+    .row-center{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      margin: 0 auto 12px;
+    }
+
+    .pill{
+      background:var(--white);
+      border-radius:999px;
+      padding:6px 12px;
+      border:2px solid rgba(108,74,163,.15);
+      font-size:0.9rem;
+    }
+
+    .feedback{
+      margin-top:6px;
+      min-height:1.4em;
+      font-size:0.9rem;
+      text-align:center;
+    }
+    .feedback.ok{ color:#117a3a; }
+    .feedback.bad{ color:#b02323; }
+
+    /* ===== Shared visuals for cards/grids ===== */
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap:12px;
+    }
+    .card{
+      background:var(--white);
+      border-radius:18px;
+      padding:10px;
+      border:2px solid rgba(108,74,163,.12);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      height:120px;
+      user-select:none;
+      cursor:pointer;
+      transition: transform .08s ease;
+    }
+    .card:active{ transform: scale(.98); }
+    .card img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+    }
+
+    .flash-ok{ animation: flashOk .25s ease; }
+    .flash-bad{ animation: flashBad .25s ease; }
+
+    @keyframes flashOk{
+      0%{ box-shadow:none; }
+      50%{ box-shadow: 0 0 0 5px rgba(183,240,200,.9); }
+      100%{ box-shadow:none; }
+    }
+    @keyframes flashBad{
+      0%{ transform:translateX(0); }
+      25%{ transform:translateX(-5px); }
+      50%{ transform:translateX(5px); }
+      75%{ transform:translateX(-3px); }
+      100%{ transform:translateX(0); }
+    }
+
+    /* Game 2 word box */
+    .word-box{
+      background:var(--white);
+      border-radius:18px;
+      padding:12px 14px;
+      text-align:center;
+      font-size:1.6rem;
+      border:2px solid rgba(108,74,163,.15);
+      margin: 0 auto 12px;
+    }
+
+    /* Game 3 */
+    .g3-wrap{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:center;
+    }
+    .big-img{
+      background:var(--white);
+      border-radius:18px;
+      padding:12px;
+      border:2px solid rgba(108,74,163,.15);
+      width:min(640px, 100%);
+    }
+    .big-img img{
+      width:100%;
+      height:220px;
+      object-fit:contain;
+    }
+    .panel{
+      background:var(--white);
+      border-radius:18px;
+      padding:10px 12px;
+      border:2px solid rgba(108,74,163,.15);
+      width:min(1000px, 100%);
+    }
+    .panel-title{
+      text-align:center;
+      font-size:0.95rem;
+      opacity:.85;
+      margin-bottom:8px;
+    }
+    .letters{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:10px;
+    }
+    .letter{
+      background:var(--purple-light);
+      border:2px solid rgba(108,74,163,.12);
+      border-radius:14px;
+      padding:8px 12px;
+      font-size:1.4rem;
+      cursor:grab;
+      user-select:none;
+    }
+    .letter.selected{
+      outline:3px solid rgba(108,74,163,.25);
+      outline-offset:2px;
+    }
+
+    .slots{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+      padding-bottom:4px;
+    }
+    .slot{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      background:#fbfaff;
+      border:2px solid rgba(108,74,163,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.4rem;
+      user-select:none;
+    }
+    .slot.space{ width:64px; background:#f4f0ff; }
+    .slot.ok{ background: rgba(183,240,200,.7); }
+    .slot.bad{ background: rgba(255,204,204,.8); }
+
+    /* Game 4 */
+    .g4-top{
+      display:flex;
+      justify-content:center;
+      margin-bottom:10px;
+    }
+    .drag-card{
+      background:var(--white);
+      border-radius:18px;
+      border:2px solid rgba(108,74,163,.15);
+      width:min(520px, 100%);
+      height:220px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:12px;
+      cursor:grab;
+      user-select:none;
+    }
+    .drag-card img{ width:100%; height:100%; object-fit:contain; }
+
+    .zones{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:12px;
+    }
+    @media(min-width:900px){
+      .zones{ grid-template-columns:1fr 1fr; }
+    }
+    .zone{
+      background:var(--white);
+      border-radius:18px;
+      border:2px solid rgba(108,74,163,.15);
+      padding:10px;
+      min-height:220px;
+    }
+    .zone h3{
+      text-align:center;
+      color:var(--purple-dark);
+      font-size:1.1rem;
+      margin-bottom:6px;
+    }
+    .zone p{
+      text-align:center;
+      opacity:.75;
+      margin-bottom:8px;
+      font-size:0.9rem;
+    }
+    .zone.over{
+      outline:4px solid rgba(108,74,163,.18);
+      outline-offset:2px;
+    }
+    .thumbs{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:8px;
+    }
+    .thumb{
+      width:72px;
+      height:56px;
+      background:#fff;
+      border-radius:14px;
+      border:2px solid rgba(108,74,163,.10);
+      padding:6px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .thumb img{ width:100%; height:100%; object-fit:contain; }
+
+    /* Modal */
+    .overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(45,24,68,.25);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:16px;
+    }
+    .overlay.show{ display:flex; }
+    .modal{
+      background:var(--white);
+      border-radius:18px;
+      border:2px solid rgba(108,74,163,.18);
+      width:min(520px, 100%);
+      padding:14px;
+      text-align:center;
+    }
+    .modal h3{
+      color:var(--purple-dark);
+      font-size:1.4rem;
+      margin-bottom:6px;
+    }
+    .modal p{
+      font-size:1.0rem;
+      margin-bottom:10px;
+      opacity:.9;
+    }
+  </style>
 </head>
 
 <body>
-<div class="container">
 
-  <!-- TOP NAV -->
-  <div class="top-nav">
-    <button onclick="prevGame()">◀</button>
-    <button onclick="nextGame()">▶</button>
+  <!-- TOP BAR: arrows only (title left blank) -->
+  <div class="top-bar">
+    <button class="top-arrow" id="prevBtn" aria-label="Viregt Spill">‹</button>
+    <div class="top-bar-title" id="topTitle"></div>
+    <button class="top-arrow" id="nextBtn" aria-label="Nächst Spill">›</button>
   </div>
 
-  <!-- INSTRUCTION -->
-  <div class="instruction" id="instruction"></div>
+  <div class="subtitle">P4 – A menger Fräizäit</div>
 
-  <!-- GAME -->
-  <div id="game"></div>
+  <div class="games" id="games">
 
-</div>
+    <!-- GAME 1 -->
+    <section class="game active" id="game1">
+      <h2>Lauschter a klick</h2>
+      <div class="instruction-box">Lauschter a klick op dat richtegt Bild.</div>
+
+      <div class="row-center">
+        <button class="primary" id="g1Replay">🔊 Lauschter nach eng Kéier</button>
+        <div class="pill" id="g1Prog">1 / 24</div>
+      </div>
+
+      <div class="grid" id="g1Grid"></div>
+      <div class="feedback" id="g1Feedback"></div>
+    </section>
+
+    <!-- GAME 2 -->
+    <section class="game" id="game2">
+      <h2>Lies a klick</h2>
+      <div class="instruction-box">Lies d’Wuert a klick op dat richtegt Bild.</div>
+
+      <div class="word-box" id="g2Word">—</div>
+
+      <div class="row-center">
+        <div class="pill" id="g2Prog">1 / 24</div>
+      </div>
+
+      <div class="grid" id="g2Grid"></div>
+      <div class="feedback" id="g2Feedback"></div>
+    </section>
+
+    <!-- GAME 3 -->
+    <section class="game" id="game3">
+      <h2>Schreif d’Wuert</h2>
+      <div class="instruction-box">Setz d’Buschtawen an déi richteg Këschten.</div>
+
+      <div class="g3-wrap">
+        <div class="big-img"><img id="g3Img" alt=""/></div>
+
+        <div class="panel">
+          <div class="panel-title">Buschtawen</div>
+          <div class="letters" id="g3Letters"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">Reiefolleg</div>
+          <div class="slots" id="g3Slots"></div>
+        </div>
+
+        <div class="row-center">
+          <div class="pill" id="g3Prog">1 / 24</div>
+          <button class="secondary" id="g3Reset">Reset</button>
+        </div>
+
+        <div class="feedback" id="g3Feedback"></div>
+      </div>
+    </section>
+
+    <!-- GAME 4 -->
+    <section class="game" id="game4">
+      <h2>Sortéier</h2>
+      <div class="instruction-box">Zéi d’Bild an déi richteg Këscht.</div>
+
+      <div class="row-center">
+        <div class="pill" id="g4Prog">1 / 24</div>
+      </div>
+
+      <div class="g4-top">
+        <div class="drag-card" id="g4Card" draggable="true">
+          <img id="g4Img" alt=""/>
+        </div>
+      </div>
+
+      <div class="zones">
+        <div class="zone" id="zoneRoueg">
+          <h3>Roueg Aktivitéiten</h3>
+          <p>Drop hei</p>
+          <div class="thumbs" id="thumbsRoueg"></div>
+        </div>
+
+        <div class="zone" id="zoneAktiv">
+          <h3>Aktiv Aktivitéiten</h3>
+          <p>Drop hei</p>
+          <div class="thumbs" id="thumbsAktiv"></div>
+        </div>
+      </div>
+
+      <div class="feedback" id="g4Feedback"></div>
+    </section>
+
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="modal">
+      <h3 id="modalTitle">Bravo!</h3>
+      <p id="modalText">Alles fäerdeg.</p>
+      <button class="primary" id="modalBtn">Nach eng Kéier</button>
+    </div>
+  </div>
 
 <script>
-/* ───────── DATA ───────── */
+/* ===================== DATA ===================== */
+const AUDIO_BASE = "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/";
+const audioUrl = (filename) => AUDIO_BASE + encodeURIComponent(filename);
+
 const items = [
-  { word: "boxen", img: "https://i.postimg.cc/DJ3s1CY0/boxen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/boxen.mp3" },
-  { word: "danzen", img: "https://i.postimg.cc/cgGYfD5K/danzen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/danzen.mp3" },
-  { word: "kachen", img: "https://i.postimg.cc/YGNFR1Jq/kachen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/kachen.mp3" },
-  { word: "lafen", img: "https://i.postimg.cc/0MGSnpLw/lafen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/lafen.mp3" },
-  { word: "liesen", img: "https://i.postimg.cc/9RP9bGvx/liesen.png", audio: "https://github.com/albrechtclaire1007/p4.5fraizait/raw/refs/heads/main/liesen.mp3" }
-  // (we’ll add the rest next — structure is ready)
+  { word: "boxen", img: "https://i.postimg.cc/DJ3s1CY0/boxen.png", audioFile: "boxen.mp3" },
+  { word: "danzen", img: "https://i.postimg.cc/cgGYfD5K/danzen.png", audioFile: "danzen.mp3" },
+  { word: "fuere skate", img: "https://i.postimg.cc/PpbDymBf/fuere-skateboard.png", audioFile: "fuere_skate.mp3" },
+  { word: "fuere velo", img: "https://i.postimg.cc/cg73hQVL/fuere-velo.png", audioFile: "fuere_velo.mp3" },
+  { word: "kachen", img: "https://i.postimg.cc/YGNFR1Jq/kachen.png", audioFile: "kachen.mp3" },
+  { word: "kucken telee", img: "https://i.postimg.cc/8Jdv4hqc/kucken-telee.png", audioFile: "kucken_telee.mp3" },
+  { word: "lafen", img: "https://i.postimg.cc/0MGSnpLw/lafen.png", audioFile: "lafen.mp3" },
+  { word: "lauschtere musek", img: "https://i.postimg.cc/5Y5zgwZw/lauschtere-musek.png", audioFile: "lauschtere musek.mp3" },
+  { word: "leieren", img: "https://i.postimg.cc/1n0FBpLK/leieren.png", audioFile: "leieren.mp3" },
+  { word: "liesen", img: "https://i.postimg.cc/9RP9bGvx/liesen.png", audioFile: "liesen.mp3" },
+  { word: "maache musek", img: "https://i.postimg.cc/ZBPNHr1w/maache-musek.png", audioFile: "maache_musek.mp3" },
+  { word: "maache sport", img: "https://i.postimg.cc/K3ZMH12n/maache-sport.png", audioFile: "maache_sport.mp3" },
+  { word: "maache yoga", img: "https://i.postimg.cc/JH1k2sL2/maache-yoga.png", audioFile: "maache_yoga.mp3" },
+  { word: "molen", img: "https://i.postimg.cc/D42XMSTR/molen.png", audioFile: "molen.mp3" },
+  { word: "raschten", img: "https://i.postimg.cc/tnXxMsbH/raschten.png", audioFile: "raschten.mp3" },
+  { word: "schwammen", img: "https://i.postimg.cc/Wq2kHdVT/schwammen.png", audioFile: "schwammen.mp3" },
+  { word: "spadséieren", img: "https://i.postimg.cc/23mh6KZW/spadseieren.png", audioFile: "spadseieren.mp3" },
+  { word: "spille basket", img: "https://i.postimg.cc/ThGgw4DS/spille-basket.png", audioFile: "spille_basket.mp3" },
+  { word: "spille fussball", img: "https://i.postimg.cc/pyxzT6FS/spille-fussball.png", audioFile: "spille_fussball.mp3" },
+  { word: "spille gittar", img: "https://i.postimg.cc/Z0ZpRMdX/spille-gittar.png", audioFile: "spille_gittar.mp3" },
+  { word: "spille videospill", img: "https://i.postimg.cc/hhrx71Lp/spille-videospiller.png", audioFile: "spille_videospill.mp3" },
+  { word: "spillen", img: "https://i.postimg.cc/z3jWRFCc/spillen.png", audioFile: "spillen.mp3" },
+  { word: "telefoneieren", img: "https://i.postimg.cc/NL4Trk6Z/telefoneieren.png", audioFile: "telefoneieren.mp3" },
+  { word: "turnen", img: "https://i.postimg.cc/Yj3gmzN7/turnen.png", audioFile: "turnen.mp3" }
 ];
 
-/* ───────── GAME STATE ───────── */
-let gameIndex = 0;
-
-/* ───────── GAME LOADER ───────── */
-function loadGame() {
-  const game = document.getElementById("game");
-
-  if (gameIndex === 0) loadGame1();
-  if (gameIndex === 1) loadGame2();
-  if (gameIndex === 2) loadGame3();
-  if (gameIndex === 3) loadGame4();
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
 }
 
-/* ───────── GAME 1: LAUSCHTER A KLICK ───────── */
-function loadGame1() {
-  document.getElementById("instruction").textContent =
-    "Lauschter a klick op dat richtegt Bild.";
+let currentAudio = null;
+function stopAudio(){
+  if(currentAudio){
+    try{ currentAudio.pause(); }catch(e){}
+    currentAudio = null;
+  }
+}
 
-  const game = document.getElementById("game");
-  game.innerHTML = "";
+/* ===================== NAV (top bar) ===================== */
+const gameEls = Array.from(document.querySelectorAll(".game"));
+let gameIndex = 0;
 
-  const grid = document.createElement("div");
-  grid.className = "grid";
+function showGame(idx){
+  stopAudio();
+  gameEls.forEach((g,i)=>g.classList.toggle("active", i===idx));
+  gameIndex = idx;
 
-  const current = items[Math.floor(Math.random() * items.length)];
-  const audio = new Audio(current.audio);
-  audio.play();
+  // Keep title blank (arrows only), but you can put a tiny dot if you prefer:
+  document.getElementById("topTitle").textContent = "";
 
-  items.forEach(item => {
+  // init/render per game
+  if(idx===0) g1Render(true);
+  if(idx===1) g2Render();
+  if(idx===2) g3Render();
+  if(idx===3) g4Render();
+}
+
+document.getElementById("prevBtn").addEventListener("click", ()=>{
+  const next = (gameIndex + gameEls.length - 1) % gameEls.length;
+  showGame(next);
+});
+document.getElementById("nextBtn").addEventListener("click", ()=>{
+  const next = (gameIndex + 1) % gameEls.length;
+  showGame(next);
+});
+
+/* ===================== MODAL ===================== */
+const overlay = document.getElementById("overlay");
+function showModal(title, text, onRestart){
+  document.getElementById("modalTitle").textContent = title;
+  document.getElementById("modalText").textContent = text;
+  overlay.classList.add("show");
+  document.getElementById("modalBtn").onclick = ()=>{
+    overlay.classList.remove("show");
+    onRestart();
+  };
+}
+
+/* ===================== GAME 1 (all images, audio auto) ===================== */
+let g1Order = shuffle(items);
+let g1Pos = 0;
+
+function g1Play(){
+  const target = g1Order[g1Pos];
+  stopAudio();
+  currentAudio = new Audio(audioUrl(target.audioFile));
+  currentAudio.play().catch(()=>{ /* first iOS play may need user tap */ });
+}
+
+function g1Render(autoPlay){
+  document.getElementById("g1Feedback").textContent = "";
+  document.getElementById("g1Feedback").className = "feedback";
+
+  document.getElementById("g1Prog").textContent = `${g1Pos+1} / ${items.length}`;
+
+  const grid = document.getElementById("g1Grid");
+  grid.innerHTML = "";
+
+  items.forEach(it=>{
     const card = document.createElement("div");
     card.className = "card";
-
     const img = document.createElement("img");
-    img.src = item.img;
-
+    img.src = it.img;
+    img.alt = it.word;
     card.appendChild(img);
 
-    card.onclick = () => {
-      if (item.word === current.word) {
-        audio.pause();
-        audio.currentTime = 0;
-        loadGame1();
+    card.addEventListener("click", ()=>{
+      const target = g1Order[g1Pos];
+
+      if(it.word === target.word){
+        card.classList.remove("flash-ok","flash-bad"); void card.offsetWidth;
+        card.classList.add("flash-ok");
+
+        g1Pos++;
+        if(g1Pos >= g1Order.length){
+          stopAudio();
+          showModal("Bravo!", "Du hues alles richteg!", ()=>{
+            g1Order = shuffle(items);
+            g1Pos = 0;
+            g1Render(true);
+          });
+          return;
+        }
+        g1Render(true);
+      }else{
+        card.classList.remove("flash-ok","flash-bad"); void card.offsetWidth;
+        card.classList.add("flash-bad");
       }
-    };
+    });
 
     grid.appendChild(card);
   });
 
-  game.appendChild(grid);
+  document.getElementById("g1Replay").onclick = ()=> g1Play();
+
+  if(autoPlay) g1Play();
 }
 
-/* ───────── PLACEHOLDERS (next step) ───────── */
-function loadGame2() {
-  document.getElementById("instruction").textContent =
-    "Lies d’Wuert a klick op dat richtegt Bild.";
-  document.getElementById("game").innerHTML = "";
+/* ===================== GAME 2 (word in white rounded box) ===================== */
+let g2Order = shuffle(items);
+let g2Pos = 0;
+
+function g2Render(){
+  const fb = document.getElementById("g2Feedback");
+  fb.textContent = "";
+  fb.className = "feedback";
+
+  const target = g2Order[g2Pos];
+  document.getElementById("g2Prog").textContent = `${g2Pos+1} / ${items.length}`;
+  document.getElementById("g2Word").textContent = target.word;
+
+  const grid = document.getElementById("g2Grid");
+  grid.innerHTML = "";
+
+  items.forEach(it=>{
+    const card = document.createElement("div");
+    card.className = "card";
+    const img = document.createElement("img");
+    img.src = it.img;
+    img.alt = it.word;
+    card.appendChild(img);
+
+    card.addEventListener("click", ()=>{
+      if(it.word === target.word){
+        card.classList.remove("flash-ok","flash-bad"); void card.offsetWidth;
+        card.classList.add("flash-ok");
+        g2Pos++;
+        if(g2Pos >= g2Order.length){
+          showModal("Bravo!", "Du hues alles richteg!", ()=>{
+            g2Order = shuffle(items);
+            g2Pos = 0;
+            g2Render();
+          });
+          return;
+        }
+        g2Render();
+      }else{
+        card.classList.remove("flash-ok","flash-bad"); void card.offsetWidth;
+        card.classList.add("flash-bad");
+      }
+    });
+
+    grid.appendChild(card);
+  });
 }
 
-function loadGame3() {
-  document.getElementById("instruction").textContent =
-    "Setz d’Buschtawen an déi richteg Reiefolleg.";
-  document.getElementById("game").innerHTML = "";
+/* ===================== GAME 3 (letters into one slot per letter, strict) ===================== */
+let g3Order = shuffle(items);
+let g3Pos = 0;
+let g3Selected = null;
+
+function g3Render(){
+  const fb = document.getElementById("g3Feedback");
+  fb.textContent = "";
+  fb.className = "feedback";
+
+  const target = g3Order[g3Pos];
+  document.getElementById("g3Prog").textContent = `${g3Pos+1} / ${items.length}`;
+  document.getElementById("g3Img").src = target.img;
+  document.getElementById("g3Img").alt = target.word;
+
+  const required = target.word;            // STRICT
+  const chars = required.split("");        // includes spaces
+
+  const lettersEl = document.getElementById("g3Letters");
+  const slotsEl = document.getElementById("g3Slots");
+  lettersEl.innerHTML = "";
+  slotsEl.innerHTML = "";
+
+  const state = new Array(chars.length).fill(null);
+
+  const pool = shuffle(chars.map(c => c===" " ? "␣" : c));
+
+  function clearSelected(){
+    if(g3Selected){
+      g3Selected.classList.remove("selected");
+      g3Selected = null;
+    }
+  }
+
+  function removeOneTile(ch){
+    const tiles = Array.from(lettersEl.querySelectorAll(".letter"));
+    const t = tiles.find(x => x.dataset.char === ch);
+    if(t){
+      if(g3Selected === t) clearSelected();
+      t.remove();
+      return true;
+    }
+    return false;
+  }
+
+  function isComplete(){ return state.every(v => v!==null); }
+
+  function complete(){
+    showModal("Bravo!", "Alles richteg!", ()=>{
+      g3Pos++;
+      if(g3Pos >= g3Order.length){
+        g3Order = shuffle(items);
+        g3Pos = 0;
+      }
+      g3Render();
+    });
+  }
+
+  // Letters pool
+  pool.forEach(ch=>{
+    const tile = document.createElement("div");
+    tile.className = "letter";
+    tile.textContent = ch;
+    tile.dataset.char = ch;
+    tile.draggable = true;
+
+    tile.addEventListener("dragstart",(e)=>{
+      e.dataTransfer.setData("text/plain", ch);
+    });
+
+    tile.addEventListener("click", ()=>{
+      if(g3Selected) g3Selected.classList.remove("selected");
+      g3Selected = tile;
+      tile.classList.add("selected");
+    });
+
+    lettersEl.appendChild(tile);
+  });
+
+  // Slots
+  chars.forEach((expected, idx)=>{
+    const slot = document.createElement("div");
+    slot.className = "slot";
+    if(expected===" ") slot.classList.add("space");
+
+    slot.addEventListener("dragover",(e)=>e.preventDefault());
+    slot.addEventListener("drop",(e)=>{
+      e.preventDefault();
+      if(state[idx]!==null) return;
+      const dropped = e.dataTransfer.getData("text/plain");
+      const normalized = dropped==="␣" ? " " : dropped;
+
+      if(normalized === expected){
+        state[idx] = expected;
+        slot.textContent = dropped;
+        slot.classList.add("ok");
+        removeOneTile(dropped);
+
+        if(isComplete()) setTimeout(complete, 180);
+      }else{
+        slot.classList.add("bad");
+        setTimeout(()=>slot.classList.remove("bad"), 220);
+      }
+    });
+
+    // click-to-place (touch friendly)
+    slot.addEventListener("click", ()=>{
+      if(state[idx]!==null) return;
+      if(!g3Selected) return;
+
+      const dropped = g3Selected.dataset.char;
+      const normalized = dropped==="␣" ? " " : dropped;
+
+      if(normalized === expected){
+        state[idx] = expected;
+        slot.textContent = dropped;
+        slot.classList.add("ok");
+        const toRemove = g3Selected;
+        clearSelected();
+        toRemove.remove();
+
+        if(isComplete()) setTimeout(complete, 180);
+      }else{
+        slot.classList.add("bad");
+        setTimeout(()=>slot.classList.remove("bad"), 220);
+      }
+    });
+
+    slotsEl.appendChild(slot);
+  });
+
+  document.getElementById("g3Reset").onclick = ()=>{
+    g3Render(); // restart same word
+  };
 }
 
-function loadGame4() {
-  document.getElementById("instruction").textContent =
-    "Zéi d’Bild an déi richteg Këscht.";
-  document.getElementById("game").innerHTML = "";
+/* ===================== GAME 4 (Roueg/Aktiv sorting) ===================== */
+const ROUEG_SET = new Set([
+  "liesen",
+  "lauschtere musek",
+  "kucken telee",
+  "raschten",
+  "leieren",
+  "molen",
+  "spille videospill",
+  "telefoneieren"
+]);
+
+let g4Order = shuffle(items);
+let g4Pos = 0;
+
+function g4Render(){
+  const fb = document.getElementById("g4Feedback");
+  fb.textContent = "";
+  fb.className = "feedback";
+
+  const target = g4Order[g4Pos];
+  document.getElementById("g4Prog").textContent = `${g4Pos+1} / ${items.length}`;
+  document.getElementById("g4Img").src = target.img;
+  document.getElementById("g4Img").alt = target.word;
+
+  const card = document.getElementById("g4Card");
+  card.setAttribute("draggable","true");
+
+  card.ondragstart = (e)=>{
+    e.dataTransfer.setData("text/plain", target.word);
+  };
+
+  const zoneRoueg = document.getElementById("zoneRoueg");
+  const zoneAktiv = document.getElementById("zoneAktiv");
+
+  function setOver(el, over){ el.classList.toggle("over", over); }
+
+  [zoneRoueg, zoneAktiv].forEach(zone=>{
+    zone.ondragover = (e)=>{ e.preventDefault(); setOver(zone,true); };
+    zone.ondragleave = ()=> setOver(zone,false);
+    zone.ondrop = (e)=>{
+      e.preventDefault();
+      setOver(zone,false);
+
+      const droppedWord = e.dataTransfer.getData("text/plain");
+      const correctKind = ROUEG_SET.has(droppedWord) ? "roueg" : "aktiv";
+      const droppedTo = (zone.id === "zoneRoueg") ? "roueg" : "aktiv";
+
+      if(correctKind === droppedTo){
+        // add thumb
+        const it = items.find(x=>x.word===droppedWord);
+        const thumb = document.createElement("div");
+        thumb.className = "thumb";
+        const img = document.createElement("img");
+        img.src = it.img;
+        img.alt = it.word;
+        thumb.appendChild(img);
+
+        if(droppedTo==="roueg") document.getElementById("thumbsRoueg").appendChild(thumb);
+        else document.getElementById("thumbsAktiv").appendChild(thumb);
+
+        g4Pos++;
+        if(g4Pos >= g4Order.length){
+          showModal("Bravo!", "Alles sortéiert!", ()=>{
+            document.getElementById("thumbsRoueg").innerHTML = "";
+            document.getElementById("thumbsAktiv").innerHTML = "";
+            g4Order = shuffle(items);
+            g4Pos = 0;
+            g4Render();
+          });
+          return;
+        }
+        g4Render();
+      }else{
+        fb.textContent = "Probéier nach eng Kéier.";
+        fb.className = "feedback bad";
+      }
+    };
+  });
 }
 
-/* ───────── NAV ───────── */
-function nextGame() {
-  gameIndex = (gameIndex + 1) % 4;
-  loadGame();
-}
-
-function prevGame() {
-  gameIndex = (gameIndex + 3) % 4;
-  loadGame();
-}
-
-loadGame();
+/* ===================== START ===================== */
+showGame(0);
 </script>
+
 </body>
 </html>
